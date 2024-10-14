@@ -100,7 +100,11 @@ AprilTagNode::AprilTagNode(const rclcpp::NodeOptions& options)
     // topics
     sub_cam(image_transport::create_camera_subscription(
         this,
+#ifdef RCLCPP_VERSION_MAJOR
         this->get_node_topics_interface()->resolve_topic_name("image_rect"),
+#else
+        "image_rect",
+#endif
         std::bind(&AprilTagNode::onCamera, this, std::placeholders::_1, std::placeholders::_2),
         declare_parameter("image_transport", "raw", descr({}, true)),
         rmw_qos_profile_sensor_data)),
